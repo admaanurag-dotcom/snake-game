@@ -1,4 +1,4 @@
-const BOARD_SIZE = 25;
+const BOARD_SIZE = 20;
 const CELL_COUNT = BOARD_SIZE * BOARD_SIZE;
 
 let gameBoard = document.getElementById('gameBoard');
