@@ -2,19 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Snake Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Snake Game</h1>
-        <div class="score-board">
-            <p>Score: <span id="score">0</span></p>
+        <div class="info-panel">
+            <h1>Snake Game</h1>
+            <div class="score-board">
+                <p>Score: <span id="score">0</span></p>
+            </div>
+            <p id="gameOverMessage" class="game-over-message"></p>
+            <button id="restartBtn" class="restart-btn" style="display: none;">Restart Game</button>
         </div>
         <div id="gameBoard" class="game-board"></div>
-        <p id="gameOverMessage" class="game-over-message"></p>
-        <button id="restartBtn" class="restart-btn" style="display: none;">Restart Game</button>
     </div>
     <script src="script.js"></script>
 </body>
