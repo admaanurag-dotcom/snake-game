@@ -1,3 +1,6 @@
+document.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+}, { passive: false });
 const BOARD_SIZE = 20;
 const CELL_COUNT = BOARD_SIZE * BOARD_SIZE;
 
