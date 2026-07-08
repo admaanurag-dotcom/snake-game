@@ -1,6 +1,3 @@
-document.addEventListener("touchmove", function (e) {
-    e.preventDefault();
-}, { passive: false });
 const BOARD_SIZE = 20;
 const CELL_COUNT = BOARD_SIZE * BOARD_SIZE;
 
@@ -15,6 +12,7 @@ let score = 0;
 let gameOver = false;
 let direction = { x: 1, y: 0 };
 let nextDirection = { x: 1, y: 0 };
+let gameLoop;
 
 // Initialize the game board
 function initializeBoard() {
@@ -118,32 +116,88 @@ function detectGameOver() {
     clearInterval(gameLoop);
 }
 
-// Handle keyboard input
+// Keyboard Controls
 document.addEventListener('keydown', (e) => {
     if (gameOver) return;
 
     switch (e.key) {
         case 'ArrowUp':
-            if (direction.y === 0) nextDirection = { x: 0, y: -1 };
+            if (direction.y === 0)
+                nextDirection = { x: 0, y: -1 };
             e.preventDefault();
             break;
+
         case 'ArrowDown':
-            if (direction.y === 0) nextDirection = { x: 0, y: 1 };
+            if (direction.y === 0)
+                nextDirection = { x: 0, y: 1 };
             e.preventDefault();
             break;
+
         case 'ArrowLeft':
-            if (direction.x === 0) nextDirection = { x: -1, y: 0 };
+            if (direction.x === 0)
+                nextDirection = { x: -1, y: 0 };
             e.preventDefault();
             break;
+
         case 'ArrowRight':
-            if (direction.x === 0) nextDirection = { x: 1, y: 0 };
+            if (direction.x === 0)
+                nextDirection = { x: 1, y: 0 };
             e.preventDefault();
             break;
     }
 });
 
-// Restart game
-restartBtn.addEventListener('click', () => {
+// Add the touch controls here
+let startX = 0;
+let startY = 0;
+
+document.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", (e) => {
+    if (gameOver) return;
+
+    let endX = e.changedTouches[0].clientX;
+    let endY = e.changedTouches[0].clientY;
+
+    let dx = endX - startX;
+    let dy = endY - startY;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+
+        // Swipe Right
+        if (dx > 30 && direction.x === 0) {
+            nextDirection = { x: 1, y: 0 };
+        }
+
+        // Swipe Left
+        else if (dx < -30 && direction.x === 0) {
+            nextDirection = { x: -1, y: 0 };
+        }
+
+    } else {
+
+        // Swipe Down
+        if (dy > 30 && direction.y === 0) {
+            nextDirection = { x: 0, y: 1 };
+        }
+
+        // Swipe Up
+        else if (dy < -30 && direction.y === 0) {
+            nextDirection = { x: 0, y: -1 };
+        }
+    }
+});
+
+document.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+}, { passive: false });
+
+
+// Reset and restart the game
+function resetGame() {
     snake = [{ x: 10, y: 10 }];
     apple = { x: 15, y: 15 };
     score = 0;
@@ -155,6 +209,13 @@ restartBtn.addEventListener('click', () => {
     restartBtn.style.display = 'none';
     render();
     startGame();
+}
+
+// Restart game listeners for both desktop and mobile
+restartBtn.addEventListener('click', resetGame);
+restartBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    resetGame();
 });
 
 // Start the game loop
@@ -166,3 +227,4 @@ function startGame() {
 initializeBoard();
 render();
 startGame();
+
